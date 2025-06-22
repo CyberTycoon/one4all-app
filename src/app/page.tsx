@@ -1,7 +1,8 @@
 'use client'
-import React, { useState, useEffect } from 'react';
-import { Brain, Zap, Target, TrendingUp, Eye, Clock, Shield, ArrowRight, Play, Sparkles, Rocket, Award, Users, CheckCircle, Network, BarChart3, Globe, Lightbulb, NetworkIcon } from 'lucide-react';
+import React, { useState, useEffect, useContext } from 'react';
+import { Brain, Zap, Target, TrendingUp, Eye, Clock, Shield, ArrowRight, Play, Sparkles, Rocket, Award, Users, CheckCircle, Network, BarChart3, Globe, Lightbulb, NetworkIcon, X, Menu } from 'lucide-react';
 import Link from 'next/link';
+import { AppContext } from '@/context/AppContext';
 
 const One4AllHomepage = () => {
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
@@ -10,6 +11,17 @@ const One4AllHomepage = () => {
   const [networkNodes, setNetworkNodes] = useState<NetworkNode[]>([]);
   type Connection = { from: number; to: number; id: number };
   const [activeConnections, setActiveConnections] = useState<Connection[]>([]);
+  const [isOpen, setIsOpen] = useState(false)
+  const { userDetails } = useContext(AppContext)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+
+  useEffect(() => {
+    if (!userDetails == null) {
+      setIsLoggedIn(true)
+    }
+  }, [userDetails])
+
+
 
   const testimonials = [
     {
@@ -225,24 +237,64 @@ const One4AllHomepage = () => {
       <nav className="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-xl border-b border-blue-200/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
+            {/* Logo Section */}
             <div className="flex items-center space-x-2">
               <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center shadow-lg">
-                <Sparkles className="w-5 h-5 text-white" />
+                <Network className="w-5 h-5 text-white" />
               </div>
               <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                 One4All
               </span>
             </div>
+
+            {/* Desktop Menu */}
             <div className="hidden md:flex items-center space-x-8">
               <a href="#features" className="text-gray-600 hover:text-blue-600 transition-colors font-medium">Features</a>
               <a href="#results" className="text-gray-600 hover:text-blue-600 transition-colors font-medium">Results</a>
               <a href="#pricing" className="text-gray-600 hover:text-blue-600 transition-colors font-medium">Pricing</a>
-              <Link href='/onboarding' className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-full hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl font-medium">
+              <Link
+                href="/onboarding/login"
+                className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-full hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl font-medium"
+              >
+                Login
+              </Link>
+              <Link
+                href="/onboarding"
+                className={` ${isLoggedIn ? "hidden" : "flex"} bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-full hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl font-medium`}
+              >
                 Start Free Trial
               </Link>
             </div>
+
+            {/* Mobile Menu Button */}
+            <div className="md:hidden">
+              <button onClick={() => setIsOpen(!isOpen)} className="text-gray-700 focus:outline-none">
+                {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              </button>
+            </div>
           </div>
         </div>
+
+        {/* Mobile Menu Dropdown */}
+        {isOpen && (
+          <div className="md:hidden bg-white border-t border-blue-200/30 px-4 pb-4 space-y-4 shadow-md">
+            <a href="#features" className="block text-gray-700 hover:text-blue-600 font-medium mt-4">Features</a>
+            <a href="#results" className="block text-gray-700 hover:text-blue-600 font-medium">Results</a>
+            <a href="#pricing" className="block text-gray-700 hover:text-blue-600 font-medium">Pricing</a>
+            <Link
+              href="/onboarding/login"
+              className="block w-full text-center bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-full hover:from-blue-700 hover:to-purple-700 transition-all font-medium"
+            >
+              Login
+            </Link>
+            <Link
+              href="/onboarding"
+              className="block w-full text-center bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-full hover:from-blue-700 hover:to-purple-700 transition-all font-medium"
+            >
+              Start Free Trial
+            </Link>
+          </div>
+        )}
       </nav>
 
       {/* Hero Section */}

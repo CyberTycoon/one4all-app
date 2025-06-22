@@ -118,9 +118,8 @@ export default function Login() {
 
             // Navigate to dashboard
 
-            setTimeout(() => {
-                navigate.push('/dashboard');
-            }, 3000);
+            navigate.push('/dashboard');
+
 
         } catch (error: unknown) {
             const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred during login';

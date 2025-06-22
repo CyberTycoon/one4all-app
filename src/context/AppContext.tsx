@@ -1,5 +1,5 @@
 'use client'
-import React, { createContext, useContext, useState, ReactNode, useEffect, useCallback } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useEffect, useCallback, useMemo } from 'react';
 import {
   User
 } from '../types';
@@ -15,6 +15,7 @@ interface AppContextType {
   selectedServiceType: string[];
   setSelectedServiceType: (types: string[]) => void;
 }
+
 export const AppContext = createContext<AppContextType>({
   userDetails: null,
   loggedUser: null,
@@ -36,12 +37,11 @@ export const useApp = () => {
 };
 
 export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [loggedUser, setLoggedUser] = useState<User | null>(null);
+  const [loggedUser, setLoggedUserState] = useState<User | null>(null);
   const [userDetails, setUserDetails] = useState<any | null>(null);
   const [isLoadingUserDetails, setIsLoadingUserDetails] = useState<boolean>(false);
   const [userDetailsError, setUserDetailsError] = useState<string | null>(null);
   const [selectedServiceType, setSelectedServiceType] = useState<string[]>([]);
-
 
   // Memoized function to fetch user profile
   const fetchUserProfile = useCallback(async () => {
@@ -68,7 +68,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
           // Token is invalid or expired
           localStorage.removeItem('token');
           localStorage.removeItem('user');
-          setLoggedUser(null);
+          setLoggedUserState(null);
           setUserDetails(null);
           throw new Error('Authentication expired. Please log in again.');
         }
@@ -101,6 +101,19 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     }
   }, [loggedUser, fetchUserProfile]);
 
+  // Memoized handler for setting logged user
+  const handleSetLoggedUser = useCallback((user: any) => {
+    setLoggedUserState(user);
+    if (user) {
+      localStorage.setItem('user', JSON.stringify(user));
+    } else {
+      localStorage.removeItem('user');
+      localStorage.removeItem('token');
+      setUserDetails(null);
+      setUserDetailsError(null);
+    }
+  }, []);
+
   // Initialize logged user from localStorage on mount
   useEffect(() => {
     const currentUser = localStorage.getItem('user');
@@ -109,7 +122,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     if (currentUser && token) {
       try {
         const parsedUser = JSON.parse(currentUser);
-        setLoggedUser(parsedUser);
+        setLoggedUserState(parsedUser);
       } catch (error) {
         console.error('Error parsing stored user data:', error);
         localStorage.removeItem('user');
@@ -118,6 +131,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     }
   }, []);
 
+  // Fetch user profile when logged user changes
   useEffect(() => {
     if (loggedUser) {
       fetchUserProfile().catch(error => {
@@ -129,38 +143,31 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     }
   }, [loggedUser, fetchUserProfile]);
 
-  useEffect(() => {
-    console.log("Context updated:", selectedServiceType);
-  }, [selectedServiceType]);
-
-
-  const handleSetLoggedUser = useCallback((user: any) => {
-    setLoggedUser(user);
-    if (user) {
-      localStorage.setItem('user', JSON.stringify(user));
-    } else {
-      localStorage.removeItem('user');
-      localStorage.removeItem('token');
-      setUserDetails(null);
-      setUserDetailsError(null);
-    }
-  }, []);
-
-
-
+  // Memoize the context value to prevent unnecessary re-renders
+  const contextValue = useMemo(() => ({
+    userDetails,
+    loggedUser,
+    isLoadingUserDetails,
+    userDetailsError,
+    setLoggedUser: handleSetLoggedUser,
+    fetchUserProfile,
+    refreshUserDetails,
+    selectedServiceType,
+    setSelectedServiceType,
+  }), [
+    userDetails,
+    loggedUser,
+    isLoadingUserDetails,
+    userDetailsError,
+    handleSetLoggedUser,
+    fetchUserProfile,
+    refreshUserDetails,
+    selectedServiceType,
+    setSelectedServiceType,
+  ]);
 
   return (
-    <AppContext.Provider value={{
-      userDetails,
-      loggedUser,
-      isLoadingUserDetails,
-      userDetailsError,
-      setLoggedUser: handleSetLoggedUser,
-      fetchUserProfile,
-      refreshUserDetails,
-      selectedServiceType,
-      setSelectedServiceType,
-    }}>
+    <AppContext.Provider value={contextValue}>
       {children}
     </AppContext.Provider>
   );

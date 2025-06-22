@@ -9,7 +9,10 @@ import {
     QrCode,
     MapPin,
     ArrowUp,
-    ArrowDown
+    ArrowDown,
+    Eye,
+    MessageSquare,
+    Zap
 } from 'lucide-react';
 import { AppContext } from '../../context/AppContext';
 import { useRouter } from 'next/navigation';
@@ -17,54 +20,55 @@ import { useRouter } from 'next/navigation';
 const Overview: React.FC = () => {
     const stats = [
         {
-            name: 'Monthly Revenue Impact',
-            value: '$4,280',
-            change: '+12.5%',
+            name: 'Predicted Uplift This Month',
+            value: '+$5,720',
+            change: '+18.4%',
             trend: 'up',
             icon: DollarSign,
             color: 'text-green-600'
         },
         {
-            name: 'New Customers',
-            value: '147',
-            change: '+8.2%',
+            name: 'Auto-Scheduled Posts',
+            value: '84',
+            change: '+34.2%',
             trend: 'up',
-            icon: Users,
+            icon: Calendar,
             color: 'text-blue-600'
         },
         {
-            name: 'Active Campaigns',
-            value: '3',
-            change: '0%',
-            trend: 'neutral',
+            name: 'Campaigns in Optimization',
+            value: '5',
+            change: '+66%',
+            trend: 'up',
             icon: TrendingUp,
             color: 'text-purple-600'
         }
     ];
 
+
     const services = [
         {
-            name: 'Presence Marketing',
+            name: 'AI Suggestions Engine',
             status: 'Active',
-            metric: '24 posts scheduled',
-            nextAction: 'Review content calendar',
-            icon: Calendar,
+            metric: '12 new insights this week',
+            nextAction: 'View today’s suggestions',
+            icon: Zap,
             color: 'bg-purple-100 text-purple-600'
         },
         {
-            name: 'QR Placements',
+            name: 'Smart Messaging',
             status: 'Active',
-            metric: '5 winning bids',
-            nextAction: 'Review new inventory',
-            icon: QrCode,
+            metric: '32 sequences triggered',
+            nextAction: 'View engagement stats',
+            icon: MessageSquare,
             color: 'bg-blue-100 text-blue-600'
         },
         {
-            name: 'Itinerary Inclusion',
-            status: 'Active',
-            metric: '3 categories active',
-            nextAction: 'Update discount settings',
-            icon: MapPin,
+            name: 'Competitor Campaigns',
+            status: 'Tracking',
+            metric: '3 rivals watched',
+            nextAction: 'View counter-campaigns',
+            icon: Eye,
             color: 'bg-green-100 text-green-600'
         }
     ];
@@ -176,28 +180,28 @@ const Overview: React.FC = () => {
                     <div className="space-y-4">
                         {[
                             {
-                                action: 'New QR placement won',
-                                location: 'Downtown Loft A',
-                                time: '2 hours ago',
-                                type: 'success'
-                            },
-                            {
-                                action: 'Content post published',
-                                location: 'Instagram',
-                                time: '4 hours ago',
+                                action: 'AI scheduled new content post',
+                                location: 'TikTok — Vegan Burger Campaign',
+                                time: '1 hour ago',
                                 type: 'info'
                             },
                             {
-                                action: 'Itinerary booking received',
-                                location: 'Romantic Nights package',
-                                time: '6 hours ago',
+                                action: 'Competitor discount tracked',
+                                location: '“Rival Foods” Summer Deal ends Friday',
+                                time: '3 hours ago',
                                 type: 'success'
                             },
                             {
-                                action: 'Monthly billing processed',
-                                location: '$247.50',
+                                action: 'Auto-sequence sent to visitor',
+                                location: 'SMS: Plan X vs Plan Y comparison',
+                                time: '6 hours ago',
+                                type: 'info'
+                            },
+                            {
+                                action: 'Campaign uplift calculated',
+                                location: '+$420 saved in CPC optimization',
                                 time: '1 day ago',
-                                type: 'neutral'
+                                type: 'success'
                             }
                         ].map((activity, index) => (
                             <div key={index} className="flex items-center space-x-4 py-3 border-b border-gray-100 last:border-b-0">
