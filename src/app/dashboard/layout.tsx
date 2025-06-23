@@ -116,7 +116,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                             </div>
                             <button
                                 onClick={handleLogout}
-                                className="p-2 bg-purple-600 rounded-md text-xs md:text-sm font-medium text-white hover:bg-purple-700 flex-shrink-0"
+                                className="p-2 cursor-pointer bg-purple-600 rounded-md text-xs md:text-sm font-medium text-white hover:bg-purple-700 flex-shrink-0"
                             >
                                 Logout
                             </button>

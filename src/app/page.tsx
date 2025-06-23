@@ -285,7 +285,7 @@ const One4AllHomepage = () => {
               </Link>
               <button
                 onClick={handleLogout}
-                className={`${!isLoggedIn ? "hidden" : "flex"} bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-full hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl font-medium`}
+                className={`${!isLoggedIn ? "hidden" : "flex"} cursor-pointer bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-full hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl font-medium`}
               >
                 Logout
               </button>
@@ -326,9 +326,9 @@ const One4AllHomepage = () => {
             </Link>
             <button
               onClick={handleLogout}
-              className={`${!isLoggedIn ? "hidden" : "flex"} block w-full text-center bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-full hover:from-blue-700 hover:to-purple-700 transition-all font-medium`}
+              className={`${!isLoggedIn ? "hidden" : "flex"} cursor-pointer block w-full text-center bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-full hover:from-blue-700 hover:to-purple-700 transition-all font-medium`}
             >
-              Dashboard
+              Logout
             </button>
           </div>
         )}
