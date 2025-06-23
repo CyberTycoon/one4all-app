@@ -1,8 +1,9 @@
 'use client'
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { Brain, Zap, Target, TrendingUp, Eye, Clock, Shield, ArrowRight, Play, Sparkles, Rocket, Award, Users, CheckCircle, Network, BarChart3, Globe, Lightbulb, NetworkIcon, X, Menu } from 'lucide-react';
 import Link from 'next/link';
 import { AppContext } from '@/context/AppContext';
+import { useRouter } from "next/navigation";
 
 const One4AllHomepage = () => {
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
@@ -14,9 +15,11 @@ const One4AllHomepage = () => {
   const [isOpen, setIsOpen] = useState(false)
   const { userDetails } = useContext(AppContext)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const { setLoggedUser } = useContext(AppContext)
+  const navigate = useRouter();
 
   useEffect(() => {
-    if (!userDetails == null) {
+    if (userDetails !== null) {
       setIsLoggedIn(true)
     }
   }, [userDetails])
@@ -114,6 +117,15 @@ const One4AllHomepage = () => {
 
     return () => observer.disconnect();
   }, []);
+
+  const handleLogout = useCallback(() => {
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+    setLoggedUser(null);
+    navigate.push('/onboarding/login');
+  }, [setLoggedUser, navigate]);
+
+
 
   const NetworkAnimation = () => (
     <div className="relative w-full h-80 overflow-hidden rounded-2xl bg-gradient-to-br from-blue-50/50 to-purple-50/50 backdrop-blur-sm border border-blue-200/30">
@@ -248,22 +260,35 @@ const One4AllHomepage = () => {
             </div>
 
             {/* Desktop Menu */}
-            <div className="hidden md:flex items-center space-x-8">
+            <div className="hidden md:flex items-center space-x-6">
               <a href="#features" className="text-gray-600 hover:text-blue-600 transition-colors font-medium">Features</a>
               <a href="#results" className="text-gray-600 hover:text-blue-600 transition-colors font-medium">Results</a>
               <a href="#pricing" className="text-gray-600 hover:text-blue-600 transition-colors font-medium">Pricing</a>
               <Link
                 href="/onboarding/login"
-                className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-full hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl font-medium"
+                className={`${isLoggedIn ? "hidden" : "flex"} bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-full hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl font-medium`}
               >
                 Login
               </Link>
+
               <Link
                 href="/onboarding"
                 className={` ${isLoggedIn ? "hidden" : "flex"} bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-full hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl font-medium`}
               >
                 Start Free Trial
               </Link>
+              <Link
+                href="/dashboard"
+                className={` ${!isLoggedIn ? "hidden" : "flex"} bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-full hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl font-medium`}
+              >
+                Dashboard
+              </Link>
+              <button
+                onClick={handleLogout}
+                className={`${!isLoggedIn ? "hidden" : "flex"} bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-full hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl font-medium`}
+              >
+                Logout
+              </button>
             </div>
 
             {/* Mobile Menu Button */}
@@ -293,6 +318,18 @@ const One4AllHomepage = () => {
             >
               Start Free Trial
             </Link>
+            <Link
+              href="/dashboard"
+              className="block w-full text-center bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-full hover:from-blue-700 hover:to-purple-700 transition-all font-medium"
+            >
+              Dashboard
+            </Link>
+            <button
+              onClick={handleLogout}
+              className={`${!isLoggedIn ? "hidden" : "flex"} block w-full text-center bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-full hover:from-blue-700 hover:to-purple-700 transition-all font-medium`}
+            >
+              Dashboard
+            </button>
           </div>
         )}
       </nav>
