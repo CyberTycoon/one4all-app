@@ -217,7 +217,7 @@ const One4AllHomepage = () => {
                 <img
                   src={heroImages[currentImageIndex]}
                   alt="One4All Dashboard"
-                  className="w-full h-100 object-cover transition-all duration-1000"
+                  className="w-full h-120 object-contain transition-all duration-1000"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-blue-900/20 to-transparent"></div>
                 <div className="absolute bottom-4 left-4 right-4">
