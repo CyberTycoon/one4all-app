@@ -1,101 +1,51 @@
+
 'use client'
 import React, { useState, useEffect, useContext, useCallback } from 'react';
-import { Brain, Zap, Target, TrendingUp, Eye, Clock, Shield, ArrowRight, Play, Sparkles, Rocket, Award, Users, CheckCircle, Network, BarChart3, Globe, Lightbulb, NetworkIcon, X, Menu } from 'lucide-react';
-import Link from 'next/link';
-import { AppContext } from '@/context/AppContext';
-import { useRouter } from "next/navigation";
+import {
+  Clock, Shield, ArrowRight, Play, Sparkles, Rocket, Award, Users, CheckCircle, Network, BarChart3, Globe, Lightbulb, NetworkIcon, X, Menu, Star, Lock, Heart, Smile, TrendingUp, Brain, Target,
+  TargetIcon,
+  LucideTarget,
+  TrendingUpIcon,
+  Clock1
+} from 'lucide-react';
 
 const One4AllHomepage = () => {
-  const [currentTestimonial, setCurrentTestimonial] = useState(0);
   const [isVisible, setIsVisible] = useState<Record<string, boolean>>({});
-  type NetworkNode = { id: number; x: number; y: number; delay: number; platform: string };
-  const [networkNodes, setNetworkNodes] = useState<NetworkNode[]>([]);
-  type Connection = { from: number; to: number; id: number };
-  const [activeConnections, setActiveConnections] = useState<Connection[]>([]);
-  const [isOpen, setIsOpen] = useState(false)
-  const { userDetails } = useContext(AppContext)
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const { setLoggedUser } = useContext(AppContext)
-  const navigate = useRouter();
+  const [isOpen, setIsOpen] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  useEffect(() => {
-    if (userDetails !== null) {
-      setIsLoggedIn(true)
-    }
-  }, [userDetails])
+  const heroImages = [
+    "/viral.jpg", // Social media dashboard
+    "/hero-1.jpg", // Analytics charts
+    "/hero-3.jpg", // Data visualization
+  ];
 
-
-
-  const testimonials = [
-    {
-      quote: "One4All didn't just increase our sales—it gave me back my nights and weekends. My family finally has me present again.",
-      author: "Sarah Chen",
-      role: "E-commerce Founder",
-      metric: "387% ROI increase"
-    },
-    {
-      quote: "We went from struggling to keep up with competitors to leading our industry. One4All made us the company others try to copy.",
-      author: "Marcus Rodriguez",
-      role: "Marketing Director",
-      metric: "2.3x revenue growth"
-    },
-    {
-      quote: "The moment I stopped worrying about 'what to post when' was the moment my business truly began to scale.",
-      author: "Emma Thompson",
-      role: "Agency Owner",
-      metric: "150+ clients served"
-    }
+  const featureImages = [
+    "https://images.unsplash.com/photo-1551434678-e076c223a692?w=400&h=300&fit=crop&crop=center", // Team meeting
+    "/hero-2.jpg", // Growth chart
+    "https://images.unsplash.com/photo-1556155092-8707de31f9c4?w=400&h=300&fit=crop&crop=center", // Automation
   ];
 
   const painPoints = [
-    "Staying up late creating content that flops",
-    "Watching competitors steal your customers",
-    "Burning ad budget on guesswork",
-    "Missing the perfect moment to post",
-    "Feeling overwhelmed by platform changes"
+    "Juggling 7 different apps just to post on all your social platforms",
+    "Posting at random times and wondering why engagement is dying",
+    "Watching competitors dominate while your posts get buried",
+    "Spending hours creating content that barely gets seen",
+    "Losing potential customers because you can't keep track of leads"
   ];
 
   const transformations = [
-    "Sleep peacefully knowing your content works",
-    "Watch competitors scramble to copy you",
-    "See every dollar multiply into more revenue",
-    "Hit viral moments with perfect timing",
-    "Stay ahead of every algorithm change"
+    "Manage ALL your social accounts from ONE powerful dashboard",
+    "Post at AI-calculated peak times when your audience is most active",
+    "Spy on competitors and instantly counter their successful campaigns",
+    "Transform daily photos/videos into viral posts with AI magic",
+    "Never lose a lead again with automated personalized follow-ups"
   ];
-
-  // Initialize network nodes
-  useEffect(() => {
-    const nodes = Array.from({ length: 12 }, (_, i) => ({
-      id: i,
-      x: Math.random() * 400,
-      y: Math.random() * 300,
-      delay: Math.random() * 2000,
-      platform: ['Instagram', 'TikTok', 'YouTube', 'LinkedIn', 'Twitter', 'Facebook'][Math.floor(Math.random() * 6)]
-    }));
-    setNetworkNodes(nodes);
-  }, []);
-
-  // Animate connections
+  // Cycle through hero images
   useEffect(() => {
     const interval = setInterval(() => {
-      const newConnections = [];
-      for (let i = 0; i < 3; i++) {
-        const from = Math.floor(Math.random() * networkNodes.length);
-        const to = Math.floor(Math.random() * networkNodes.length);
-        if (from !== to) {
-          newConnections.push({ from, to, id: Date.now() + i });
-        }
-      }
-      setActiveConnections(newConnections);
-    }, 2000);
-
-    return () => clearInterval(interval);
-  }, [networkNodes]);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentTestimonial(prev => (prev + 1) % testimonials.length);
-    }, 5000);
+      setCurrentImageIndex(prev => (prev + 1) % heroImages.length);
+    }, 3000);
     return () => clearInterval(interval);
   }, []);
 
@@ -118,445 +68,335 @@ const One4AllHomepage = () => {
     return () => observer.disconnect();
   }, []);
 
-  const handleLogout = useCallback(() => {
-    localStorage.removeItem('user');
-    localStorage.removeItem('token');
-    setLoggedUser(null);
-    navigate.push('/onboarding/login');
-  }, [setLoggedUser, navigate]);
-
-
-
   const NetworkAnimation = () => (
-    <div className="relative w-full h-80 overflow-hidden rounded-2xl bg-gradient-to-br from-blue-50/50 to-purple-50/50 backdrop-blur-sm border border-blue-200/30">
-      <div className="absolute inset-0 flex items-center justify-center">
-        {/* Central Hub */}
-        <div className="relative">
-          <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-2xl animate-pulse">
-            <NetworkIcon className="w-8 h-8 text-white" />
+    <div className="relative w-full h-80 overflow-hidden rounded-2xl bg-white shadow-2xl border border-gray-200">
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-indigo-50">
+        <div className="absolute inset-0 flex items-center justify-center">
+          {/* Central Hub */}
+          <div className="relative">
+            <div className="w-20 h-20 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-full flex items-center justify-center shadow-xl animate-pulse">
+              <NetworkIcon className="w-10 h-10 text-white" />
+            </div>
+            <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 text-sm font-bold text-blue-700 whitespace-nowrap bg-white px-3 py-1 rounded-full shadow-md">
+              One4All AI
+            </div>
           </div>
-          <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 text-sm font-semibold text-blue-700 whitespace-nowrap">
-            One4All AI
-          </div>
-        </div>
 
-        {/* Network Nodes */}
-        {networkNodes.map((node) => (
-          <div
-            key={node.id}
-            className="absolute w-8 h-8 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-full flex items-center justify-center shadow-lg animate-bounce"
-            style={{
-              left: `${node.x}px`,
-              top: `${node.y}px`,
-              animationDelay: `${node.delay}ms`,
-              animationDuration: '3s'
-            }}
-          >
-            <div className="w-3 h-3 bg-white rounded-full"></div>
+          {/* Floating Metrics */}
+          <div className="absolute top-6 right-6 space-y-3">
+            <div className="bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-bold shadow-md animate-bounce">
+              +387% ROI
+            </div>
+            <div className="bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-bold shadow-md animate-bounce" style={{ animationDelay: '0.5s' }}>
+              15hrs Saved
+            </div>
+            <div className="bg-purple-100 text-purple-800 px-4 py-2 rounded-full text-sm font-bold shadow-md animate-bounce" style={{ animationDelay: '1s' }}>
+              94% Accuracy
+            </div>
           </div>
-        ))}
 
-        {/* Animated Connections */}
-        <svg className="absolute inset-0 w-full h-full pointer-events-none">
-          {activeConnections.map((connection) => {
-            const fromNode = networkNodes[connection.from];
-            const toNode = networkNodes[connection.to];
-            if (!fromNode || !toNode) return null;
-
-            return (
-              <line
-                key={connection.id}
-                x1={fromNode.x + 16}
-                y1={fromNode.y + 16}
-                x2={toNode.x + 16}
-                y2={toNode.y + 16}
-                stroke="url(#gradient)"
-                strokeWidth="2"
-                className="animate-pulse"
-              />
-            );
-          })}
-          <defs>
-            <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#3B82F6" stopOpacity="0.8" />
-              <stop offset="100%" stopColor="#8B5CF6" stopOpacity="0.8" />
-            </linearGradient>
-          </defs>
-        </svg>
-
-        {/* Growth Indicators */}
-        <div className="absolute top-4 right-4 space-y-2">
-          <div className="bg-green-500/20 text-green-700 px-3 py-1 rounded-full text-xs font-semibold animate-pulse">
-            +387% ROI
-          </div>
-          <div className="bg-blue-500/20 text-blue-700 px-3 py-1 rounded-full text-xs font-semibold animate-pulse" style={{ animationDelay: '0.5s' }}>
-            2.3x Growth
-          </div>
-          <div className="bg-purple-500/20 text-purple-700 px-3 py-1 rounded-full text-xs font-semibold animate-pulse" style={{ animationDelay: '1s' }}>
-            15hrs Saved
+          {/* Platform Icons */}
+          <div className="absolute inset-0">
+            {['Instagram', 'TikTok', 'LinkedIn', 'Twitter', 'Facebook', 'YouTube'].map((platform, i) => (
+              <div
+                key={platform}
+                className="absolute w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center animate-pulse"
+                style={{
+                  left: `${20 + (i * 60) % 300}px`,
+                  top: `${50 + (i * 80) % 200}px`,
+                  animationDelay: `${i * 0.3}s`
+                }}
+              >
+                <div className="w-6 h-6 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full"></div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
     </div>
   );
 
-  const ContentPreview = () => {
-    const [activePost, setActivePost] = useState(0);
-    const posts = [
-      { platform: 'Instagram', engagement: '94%', reach: '2.3M' },
-      { platform: 'TikTok', engagement: '87%', reach: '1.8M' },
-      { platform: 'LinkedIn', engagement: '91%', reach: '890K' }
-    ];
-
-    useEffect(() => {
-      const interval = setInterval(() => {
-        setActivePost(prev => (prev + 1) % posts.length);
-      }, 2000);
-      return () => clearInterval(interval);
-    }, []);
-
-    return (
-      <div className="bg-gradient-to-br from-white/60 to-blue-50/60 backdrop-blur-sm rounded-2xl p-6 border border-blue-200/30">
-        <div className="flex items-center justify-between mb-4">
-          <h4 className="font-semibold text-gray-800">AI-Generated Content</h4>
-          <div className="flex space-x-1">
-            {posts.map((_, i) => (
-              <div key={i} className={`w-2 h-2 rounded-full ${i === activePost ? 'bg-blue-500' : 'bg-gray-300'}`} />
-            ))}
-          </div>
-        </div>
-
-        <div className="space-y-3">
-          <div className="bg-white/80 rounded-lg p-4 shadow-sm">
-            <div className="flex items-center space-x-2 mb-2">
-              <div className="w-6 h-6 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full"></div>
-              <span className="text-sm font-medium text-gray-700">{posts[activePost].platform}</span>
-            </div>
-            <div className="text-xs text-gray-600 mb-2">Predicted to go viral in 2.3 hours</div>
-            <div className="flex space-x-4 text-xs">
-              <span className="text-green-600 font-semibold">Engagement: {posts[activePost].engagement}</span>
-              <span className="text-blue-600 font-semibold">Reach: {posts[activePost].reach}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 text-gray-900 overflow-hidden">
+    <div className="min-h-screen bg-white text-gray-900 overflow-hidden">
       {/* Navigation */}
-      <nav className="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-xl border-b border-blue-200/30">
+      <nav className="fixed top-0 w-full z-50 bg-white/95 backdrop-blur-lg border-b border-gray-200 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            {/* Logo Section */}
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center shadow-lg">
-                <Network className="w-5 h-5 text-white" />
+            {/* Logo */}
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-xl flex items-center justify-center shadow-lg">
+                <Network className="w-6 h-6 text-white" />
               </div>
-              <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              <span className="text-2xl font-bold text-gray-900">
                 One4All
               </span>
             </div>
 
             {/* Desktop Menu */}
-            <div className="hidden md:flex items-center space-x-6">
-              <a href="#features" className="text-gray-600 hover:text-blue-600 transition-colors font-medium">Features</a>
-              <a href="#results" className="text-gray-600 hover:text-blue-600 transition-colors font-medium">Results</a>
-              <a href="#pricing" className="text-gray-600 hover:text-blue-600 transition-colors font-medium">Pricing</a>
-              <Link
-                href="/onboarding/login"
-                className={`${isLoggedIn ? "hidden" : "flex"} bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-full hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl font-medium`}
-              >
-                Login
-              </Link>
-
-              <Link
-                href="/onboarding"
-                className={` ${isLoggedIn ? "hidden" : "flex"} bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-full hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl font-medium`}
-              >
+            <div className="hidden md:flex items-center space-x-8">
+              <a href="#features" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">Features</a>
+              <a href="#how-it-works" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">How It Works</a>
+              <a href="#pricing" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">Pricing</a>
+              <button className="cursor-pointer bg-blue-600 text-white px-6 py-2.5 rounded-lg hover:bg-blue-700 transition-all duration-300 font-semibold shadow-lg hover:shadow-xl">
                 Start Free Trial
-              </Link>
-              <Link
-                href="/dashboard"
-                className={` ${!isLoggedIn ? "hidden" : "flex"} bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-full hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl font-medium`}
-              >
-                Dashboard
-              </Link>
-              <button
-                onClick={handleLogout}
-                className={`${!isLoggedIn ? "hidden" : "flex"} cursor-pointer bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-full hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl font-medium`}
-              >
-                Logout
               </button>
             </div>
 
             {/* Mobile Menu Button */}
             <div className="md:hidden">
-              <button onClick={() => setIsOpen(!isOpen)} className="text-gray-700 focus:outline-none">
+              <button onClick={() => setIsOpen(!isOpen)} className="cursor-pointer text-gray-700 focus:outline-none">
                 {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
               </button>
             </div>
           </div>
         </div>
 
-        {/* Mobile Menu Dropdown */}
+        {/* Mobile Menu */}
         {isOpen && (
-          <div className="md:hidden bg-white border-t border-blue-200/30 px-4 pb-4 space-y-4 shadow-md">
-            <a href="#features" className="block text-gray-700 hover:text-blue-600 font-medium mt-4">Features</a>
-            <a href="#results" className="block text-gray-700 hover:text-blue-600 font-medium">Results</a>
-            <a href="#pricing" className="block text-gray-700 hover:text-blue-600 font-medium">Pricing</a>
-            <Link
-              href="/onboarding/login"
-              className="block w-full text-center bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-full hover:from-blue-700 hover:to-purple-700 transition-all font-medium"
-            >
-              Login
-            </Link>
-            <Link
-              href="/onboarding"
-              className="block w-full text-center bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-full hover:from-blue-700 hover:to-purple-700 transition-all font-medium"
-            >
+          <div className="md:hidden bg-white border-t border-gray-200 px-4 pb-4 space-y-4 shadow-lg">
+            <a href="#features" className="block text-gray-700 hover:text-blue-600 font-medium py-2">Features</a>
+            <a href="#how-it-works" className="block text-gray-700 hover:text-blue-600 font-medium py-2">How It Works</a>
+            <a href="#pricing" className="block text-gray-700 hover:text-blue-600 font-medium py-2">Pricing</a>
+            <button className="cursor-pointer w-full bg-blue-600 text-white px-4 py-3 rounded-lg hover:bg-blue-700 transition-all font-semibold">
               Start Free Trial
-            </Link>
-            <Link
-              href="/dashboard"
-              className="block w-full text-center bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-full hover:from-blue-700 hover:to-purple-700 transition-all font-medium"
-            >
-              Dashboard
-            </Link>
-            <button
-              onClick={handleLogout}
-              className={`${!isLoggedIn ? "hidden" : "flex"} cursor-pointer block w-full text-center bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-full hover:from-blue-700 hover:to-purple-700 transition-all font-medium`}
-            >
-              Logout
             </button>
           </div>
         )}
       </nav>
 
       {/* Hero Section */}
-      <section className="relative pt-24 pb-12 px-4 sm:px-6 lg:px-8">
+      <section className="relative pt-24 pb-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-gray-50 to-white">
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Left Side - Text Content */}
+            {/* Left Side - Content */}
             <div className="text-center lg:text-left">
-              <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-blue-100 to-purple-100 rounded-full px-6 py-3 mb-8 border border-blue-200/50">
-                <Zap className="w-4 h-4 text-yellow-500 animate-pulse" />
-                <span className="text-sm font-medium text-gray-700">AI Co-Pilot for High-Converting Content</span>
+              <div className="inline-flex items-center space-x-2 bg-blue-50 text-blue-700 rounded-full px-4 py-2 mb-6 border border-blue-200">
+                <Sparkles className="w-4 h-4" />
+                <span className="text-sm font-semibold">AI-Powered Content Revolution</span>
               </div>
 
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
-                Stop <span className="bg-gradient-to-r from-red-500 to-orange-500 bg-clip-text text-transparent">Guessing</span>
-                <br />
-                Start <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Dominating</span>
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight text-gray-900">
+                Stop Creating Content That
+                <span className="text-blue-600 block">Gets Ignored</span>
               </h1>
 
               <p className="text-xl text-gray-600 mb-8 max-w-2xl leading-relaxed">
-                While you're stuck creating content that might work, your competitors are stealing your customers.
-                <span className="text-blue-600 font-semibold"> One4All gives you the unfair advantage</span> —
-                AI that predicts what will go viral before you even post it.
+                While your competitors struggle with guesswork, you'll dominate with AI that predicts what goes viral.
+                <strong className="text-gray-900"> Transform your content strategy in 24 hours.</strong>
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center mb-12">
-                <Link href='/onboarding' className="group bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-full text-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-2xl hover:shadow-blue-500/25 hover:scale-105 flex items-center space-x-2">
-                  <span>Transform My Business</span>
+                <button className="group cursor-pointer bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-700 transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-105 flex items-center space-x-2">
+                  <span>Start Your Transformation</span>
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </Link>
-                <button className="group flex items-center space-x-2 text-blue-600 hover:text-blue-700 transition-colors">
+                </button>
+                <button className="group cursor-pointer flex items-center space-x-3 text-blue-600 hover:text-blue-700 transition-colors">
                   <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center group-hover:bg-blue-200 transition-all">
                     <Play className="w-5 h-5 ml-1" />
                   </div>
-                  <span className="text-lg font-medium">See It In Action</span>
+                  <span className="text-lg font-medium">Watch Demo</span>
                 </button>
               </div>
 
-              {/* Social Proof */}
-              <div className="flex flex-wrap justify-center lg:justify-start items-center gap-8 text-gray-500 text-sm">
+              {/* Trust Indicators */}
+              <div className="flex flex-wrap justify-center lg:justify-start items-center gap-6 text-gray-600">
                 <div className="flex items-center space-x-2">
-                  <div className="flex -space-x-2">
-                    {[...Array(4)].map((_, i) => (
-                      <div key={i} className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full border-2 border-white shadow-sm"></div>
-                    ))}
-                  </div>
-                  <span>2,847+ businesses transformed</span>
+                  <Shield className="w-5 h-5 text-green-500" />
+                  <span className="font-medium">No Credit Card Required</span>
                 </div>
-                <div className="flex items-center space-x-1">
-                  {[...Array(5)].map((_, i) => (
-                    <div key={i} className="w-4 h-4 bg-yellow-400 rounded-full"></div>
-                  ))}
-                  <span className="ml-2">4.9/5 average rating</span>
+                <div className="flex items-center space-x-2">
+                  <Clock className="w-5 h-5 text-blue-500" />
+                  <span className="font-medium">Setup in 5 Minutes</span>
                 </div>
               </div>
             </div>
 
-            {/* Right Side - Network Animation */}
+            {/* Right Side - Hero Image */}
             <div className="relative">
-              <NetworkAnimation />
-
-              {/* Floating Cards */}
-              <div className="absolute -top-4 -right-4 animate-bounce" style={{ animationDelay: '0.5s' }}>
-                <div className="bg-white/90 backdrop-blur-sm rounded-lg p-3 shadow-lg border border-green-200/50">
-                  <div className="flex items-center space-x-2">
-                    <TrendingUp className="w-4 h-4 text-green-500" />
-                    <span className="text-sm font-semibold text-green-700">Revenue +387%</span>
+              <div className="relative overflow-hidden rounded-2xl shadow-2xl">
+                <img
+                  src={heroImages[currentImageIndex]}
+                  alt="One4All Dashboard"
+                  className="w-full h-100 object-cover transition-all duration-1000"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-blue-900/20 to-transparent"></div>
+                <div className="absolute bottom-4 left-4 right-4">
+                  <div className="bg-white/90 backdrop-blur-sm rounded-lg p-4 shadow-lg">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-2">
+                        <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                        <span className="text-sm font-semibold text-gray-800">AI Analysis Running</span>
+                      </div>
+                      <div className="text-sm font-bold text-green-600">+387% Performance</div>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              <div className="absolute -bottom-4 -left-4 animate-bounce" style={{ animationDelay: '1s' }}>
-                <div className="bg-white/90 backdrop-blur-sm rounded-lg p-3 shadow-lg border border-blue-200/50">
-                  <div className="flex items-center space-x-2">
-                    <Clock className="w-4 h-4 text-blue-500" />
-                    <span className="text-sm font-semibold text-blue-700">15hrs Saved Weekly</span>
-                  </div>
-                </div>
+              {/* Image indicators */}
+              <div className="flex justify-center space-x-2 mt-4">
+                {heroImages.map((_, i) => (
+                  <div key={i} className={`w-2 h-2 rounded-full transition-all ${i === currentImageIndex ? 'bg-blue-600' : 'bg-gray-300'}`} />
+                ))}
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* How It Works Visual */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-white/50 to-blue-50/50">
+      {/* Problem Section */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-50">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">
-              See <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">One4All</span> in Action
+          <div className="text-center mb-12">
+            <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-gray-900">
+              Tired of Content That Falls Flat?
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Watch how One4All transforms your business into a content powerhouse that competitors can't ignore.
+              Every minute you spend creating content that doesn't convert is a minute your competitors get ahead.
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-8 items-center">
-            <ContentPreview />
+            <div className="relative">
+              <img
+                src="/sad.jpg"
+                alt="Frustrated business owner"
+                className="w-full h-80 object-cover rounded-2xl shadow-xl"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-red-900/30 to-transparent rounded-2xl"></div>
+            </div>
 
-            <div className="space-y-6">
-              <div className="flex items-start space-x-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
-                  <Brain className="w-6 h-6 text-white" />
+            <div className="space-y-4">
+              {painPoints.map((pain, index) => (
+                <div key={index} className="flex items-start space-x-4 p-4 rounded-xl bg-white border border-red-200 shadow-sm">
+                  <div className="w-2 h-2 bg-red-500 rounded-full mt-3 flex-shrink-0"></div>
+                  <p className="text-gray-700 font-medium">{pain}</p>
                 </div>
-                <div>
-                  <h3 className="text-xl font-semibold text-gray-800 mb-2">AI Analyzes Your Market</h3>
-                  <p className="text-gray-600">Our AI studies 10M+ data points to understand what makes your audience tick and what your competitors are missing.</p>
-                </div>
-              </div>
+              ))}
 
-              <div className="flex items-start space-x-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
-                  <Lightbulb className="w-6 h-6 text-white" />
+              <div className="mt-6 p-6 bg-red-50 rounded-xl border border-red-200">
+                <div className="flex items-center space-x-2 mb-2">
+                  <Heart className="w-5 h-5 text-red-500" />
+                  <span className="font-bold text-red-700">The Real Cost</span>
                 </div>
-                <div>
-                  <h3 className="text-xl font-semibold text-gray-800 mb-2">Creates Viral-Ready Content</h3>
-                  <p className="text-gray-600">Generate content that's scientifically designed to go viral, timed perfectly for maximum engagement.</p>
-                </div>
-              </div>
-
-              <div className="flex items-start space-x-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center flex-shrink-0">
-                  <Rocket className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-semibold text-gray-800 mb-2">Scales Your Success</h3>
-                  <p className="text-gray-600">Automatically optimizes, schedules, and scales your content across all platforms while you focus on growing your business.</p>
-                </div>
+                <p className="text-red-700">
+                  While you're stuck in the content creation hamster wheel, your business growth stagnates and your dreams feel further away than ever.
+                </p>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Pain Points to Transformation */}
-      <section id="transformation" className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-red-50/50 to-green-50/50">
+      {/* Solution Section */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">
-              From <span className="text-red-500">Frustration</span> to <span className="text-green-500">Freedom</span>
+          <div className="text-center mb-12">
+            <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-gray-900">
+              Imagine If Content Creation Was
+              <span className="text-green-600"> This Simple</span>
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Stop living in content creation hell. Your competitors are gaining ground while you're stuck in the endless cycle of guess-and-post.
+              Picture waking up to viral content, engaged audiences, and growing revenue – all while you slept.
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Before */}
-            <div id="before" className={`space-y-6 transition-all duration-1000 ${isVisible.before ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'}`}>
-              <div className="text-center lg:text-left">
-                <h3 className="text-2xl font-bold text-red-500 mb-4">Your Current Reality</h3>
-                <p className="text-gray-600 mb-6">Sound familiar? You're not alone in this struggle.</p>
-              </div>
-
-              {painPoints.map((pain, index) => (
-                <div key={index} className="flex items-start space-x-4 p-4 rounded-xl bg-red-50 border border-red-200/50">
-                  <div className="w-2 h-2 bg-red-500 rounded-full mt-3 flex-shrink-0"></div>
-                  <p className="text-gray-700">{pain}</p>
+          <div className="grid md:grid-cols-2 gap-8 items-center">
+            <div className="space-y-4">
+              {transformations.map((transformation, index) => (
+                <div key={index} className="flex items-start space-x-4 p-4 rounded-xl bg-green-50 border border-green-200 shadow-sm">
+                  <CheckCircle className="w-5 h-5 text-green-600 mt-1 flex-shrink-0" />
+                  <p className="text-gray-700 font-medium">{transformation}</p>
                 </div>
               ))}
+
+              <div className="mt-6 p-6 bg-green-50 rounded-xl border border-green-200">
+                <div className="flex items-center space-x-2 mb-2">
+                  <Smile className="w-5 h-5 text-green-600" />
+                  <span className="font-bold text-green-700">Your New Reality</span>
+                </div>
+                <p className="text-green-700">
+                  Finally have the time and energy to focus on what you love – building your business and living your life.
+                </p>
+              </div>
             </div>
 
-            {/* After */}
-            <div id="after" className={`space-y-6 transition-all duration-1000 delay-300 ${isVisible.after ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'}`}>
-              <div className="text-center lg:text-left">
-                <h3 className="text-2xl font-bold text-green-500 mb-4">Your New Reality</h3>
-                <p className="text-gray-600 mb-6">This is your life with One4All working for you 24/7.</p>
-              </div>
-
-              {transformations.map((transformation, index) => (
-                <div key={index} className="flex items-start space-x-4 p-4 rounded-xl bg-green-50 border border-green-200/50">
-                  <CheckCircle className="w-5 h-5 text-green-500 mt-1 flex-shrink-0" />
-                  <p className="text-gray-700">{transformation}</p>
+            <div className="relative">
+              <img
+                src="/happy.jpg"
+                alt="Successful business owner"
+                className="w-full h-80 object-cover rounded-2xl shadow-xl"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-green-900/20 to-transparent rounded-2xl"></div>
+              <div className="absolute bottom-4 left-4 right-4">
+                <div className="bg-white/90 backdrop-blur-sm rounded-lg p-4 shadow-lg">
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-green-600 mb-1">This Could Be You</div>
+                    <div className="text-sm text-gray-600">Living the business owner's dream</div>
+                  </div>
                 </div>
-              ))}
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Core Features */}
-      <section id="features" className="py-20 px-4 sm:px-6 lg:px-8">
+      {/* How It Works */}
+      <section id="how-it-works" className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-50">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">
-              Your <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Unfair Advantage</span>
+            <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-gray-900">
+              How One4All Works Its Magic
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              While others play catch-up, you'll be three steps ahead with AI that thinks like a marketing genius.
+              Three simple steps to transform your content strategy from guesswork to guaranteed results.
             </p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
             {[
               {
+                step: "01",
+                title: "AI Analyzes Your Market",
+                description: "Our advanced AI studies millions of data points to understand your audience, competitors, and trending topics in your niche.",
+                image: featureImages[0],
                 icon: Brain,
-                title: "AI Foresight Engine",
-                description: "Know what will go viral before anyone else does",
-                details: "Analyzes 10M+ data points to predict content performance with 94% accuracy",
-                color: "from-blue-500 to-purple-600"
+                color: "blue"
               },
               {
-                icon: Target,
-                title: "Competitor Crusher",
-                description: "Turn your rivals' moves into your victories",
-                details: "Real-time competitor tracking + instant counter-campaign generation",
-                color: "from-red-500 to-pink-600"
+                step: "02",
+                title: "Predicts Viral Content",
+                description: "Generate content that's scientifically designed to go viral, with optimal timing and platform-specific optimization.",
+                image: featureImages[1],
+                icon: TargetIcon,
+                color: "red"
               },
               {
+                step: "03",
+                title: "Scales Your Success",
+                description: "Automatically schedule, optimize, and scale your content across all platforms while you focus on growing your business.",
+                image: featureImages[2],
                 icon: Rocket,
-                title: "Growth Multiplier",
-                description: "Scale without the stress or sleepless nights",
-                details: "Automated content creation, scheduling, and optimization across all platforms",
-                color: "from-cyan-500 to-blue-600"
+                color: "purple"
               }
-            ].map((feature, index) => (
+            ].map((step, index) => (
               <div key={index} className="group relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-2xl blur-xl group-hover:blur-lg transition-all duration-300"></div>
-                <div className="relative bg-white/70 backdrop-blur-xl p-8 rounded-2xl border border-blue-200/30 hover:border-blue-300/50 transition-all duration-300 hover:transform hover:scale-105 shadow-lg hover:shadow-xl">
-                  <div className={`w-16 h-16 bg-gradient-to-br ${feature.color} rounded-xl flex items-center justify-center mb-6 group-hover:animate-pulse shadow-lg`}>
-                    <feature.icon className="w-8 h-8 text-white" />
+                <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border border-gray-200">
+                  <div className="relative mb-6">
+                    <img
+                      src={step.image}
+                      alt={step.title}
+                      className="w-full h-48 object-cover rounded-xl"
+                    />
+                    <div className={`absolute -top-4 -right-4 w-12 h-12 bg-${step.color}-600 rounded-full flex items-center justify-center shadow-lg`}>
+                      <step.icon className="w-6 h-6 text-white" />
+                    </div>
+                    <div className="absolute -bottom-4 -left-4 bg-white rounded-full w-12 h-12 flex items-center justify-center shadow-lg border border-gray-200">
+                      <span className="text-lg font-bold text-gray-700">{step.step}</span>
+                    </div>
                   </div>
-                  <h3 className="text-2xl font-bold mb-4 text-gray-800">{feature.title}</h3>
-                  <p className="text-gray-600 mb-4 text-lg">{feature.description}</p>
-                  <p className="text-sm text-gray-500">{feature.details}</p>
+                  <h3 className="text-2xl font-bold mb-4 text-gray-900">{step.title}</h3>
+                  <p className="text-gray-600 leading-relaxed">{step.description}</p>
                 </div>
               </div>
             ))}
@@ -564,129 +404,137 @@ const One4AllHomepage = () => {
         </div>
       </section>
 
-      {/* Results Section */}
-      <section id="results" className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-white/50 to-purple-50/50">
-        <div className="max-w-6xl mx-auto">
+      {/* Features Section */}
+      <section id="features" className="py-16 px-4 sm:px-6 lg:px-8 bg-white">
+        <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">
-              Results That <span className="text-green-500">Speak Volumes</span>
+            <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-gray-900">
+              Your Unfair Advantage
             </h2>
-            <p className="text-xl text-gray-600">
-              Don't just take our word for it. These numbers represent real businesses, real growth, real transformation.
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              While others guess, you'll know exactly what works. Every feature designed to give you the edge.
             </p>
           </div>
 
-          {/* Metrics Grid */}
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
-            {[
-              { metric: "387%", label: "Average ROI Increase", icon: TrendingUp, color: "from-green-500 to-emerald-600" },
-              { metric: "2.3x", label: "Revenue Growth", icon: Award, color: "from-blue-500 to-cyan-600" },
-              { metric: "94%", label: "Prediction Accuracy", icon: Target, color: "from-purple-500 to-pink-600" },
-              { metric: "15hrs", label: "Weekly Time Saved", icon: Clock, color: "from-orange-500 to-red-600" }
-            ].map((stat, index) => (
-              <div key={index} className="text-center p-8 rounded-2xl bg-white/70 backdrop-blur-xl border border-blue-200/30 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-                <div className={`w-16 h-16 bg-gradient-to-br ${stat.color} rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg`}>
-                  <stat.icon className="w-8 h-8 text-white" />
-                </div>
-                <div className="text-4xl font-bold text-gray-800 mb-2">{stat.metric}</div>
-                <div className="text-gray-600 font-medium">{stat.label}</div>
-              </div>
-            ))}
-          </div>
-
-
-          {/* Testimonial Carousel */}
-          <div className="relative bg-gradient-to-r from-purple-500/10 to-cyan-500/10 rounded-3xl p-8 backdrop-blur-xl border border-white/10">
-            <div className="text-center">
-              <div className="text-2xl sm:text-3xl font-bold mb-6 leading-relaxed text-black">
-                "{testimonials[currentTestimonial].quote}"
-              </div>
-              <div className="flex items-center justify-center space-x-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-cyan-500 rounded-full"></div>
-                <div className="text-left">
-                  <div className="font-semibold">{testimonials[currentTestimonial].author}</div>
-                  <div className=" text-sm">{testimonials[currentTestimonial].role}</div>
-                </div>
-                <div className="hidden sm:block text-cyan-400 font-semibold text-lg">
-                  {testimonials[currentTestimonial].metric}
-                </div>
-              </div>
+          <div className="grid lg:grid-cols-2 gap-12 items-center mb-16">
+            <div>
+              <NetworkAnimation />
             </div>
-
-            {/* Carousel Indicators */}
-            <div className="flex justify-center space-x-2 mt-6">
-              {testimonials.map((_, index) => (
-                <button
-                  key={index}
-                  className={`w-3 h-3 rounded-full transition-all ${index === currentTestimonial ? 'bg-cyan-400' : 'bg-gray-600'
-                    }`}
-                  onClick={() => setCurrentTestimonial(index)}
-                />
+            <div className="space-y-8">
+              {[
+                {
+                  icon: Brain,
+                  title: "AI Foresight Engine",
+                  description: "Know what will go viral before anyone else does. Our AI analyzes patterns across millions of posts to predict success with 94% accuracy."
+                },
+                {
+                  icon: Target,
+                  title: "Competitor Intelligence",
+                  description: "Turn your rivals' moves into your victories. Get real-time insights on what's working in your industry and create better content instantly."
+                },
+                {
+                  icon: Rocket,
+                  title: "Automated Growth",
+                  description: "Scale without the stress. Automated content creation, scheduling, and optimization across all platforms while you sleep."
+                }
+              ].map((feature, index) => (
+                <div key={index} className="flex items-start space-x-4">
+                  <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg">
+                    <feature.icon className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-gray-900 mb-2">{feature.title}</h3>
+                    <p className="text-gray-600 leading-relaxed">{feature.description}</p>
+                  </div>
+                </div>
               ))}
             </div>
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
+      {/* Results Section */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-50">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-gray-900">
+              Results That Speak for Themselves
+            </h2>
+            <p className="text-xl text-gray-600">
+              These aren't just numbers – they represent real transformation and growth.
+            </p>
+          </div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              { metric: "387%", label: "Average ROI Increase", icon: TrendingUpIcon, color: "green" },
+              { metric: "2.3x", label: "Revenue Growth", icon: Award, color: "blue" },
+              { metric: "94%", label: "Prediction Accuracy", icon: LucideTarget, color: "purple" },
+              { metric: "15hrs", label: "Weekly Time Saved", icon: Clock1, color: "orange" }
+            ].map((stat, index) => (
+              <div key={index} className="bg-white rounded-2xl p-8 text-center shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200">
+                <div className={`w-16 h-16 bg-${stat.color}-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg`}>
+                  <stat.icon className="w-8 h-8 text-white" />
+                </div>
+                <div className="text-4xl font-bold text-gray-900 mb-2">{stat.metric}</div>
+                <div className="text-gray-600 font-medium">{stat.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Final CTA */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-600 to-indigo-700">
         <div className="max-w-4xl mx-auto text-center">
-          <div className="relative">
-            <div className="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-cyan-600/20 rounded-3xl blur-2xl"></div>
-            <div className="relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl rounded-3xl p-12 border border-white/20">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">
-                Your Competitors Won't Wait
-              </h2>
-              <p className="text-xl  mb-8 max-w-2xl mx-auto">
-                Every day you delay is another day they gain ground. Start your transformation today
-                and watch them scramble to keep up with you.
-              </p>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6 text-white">
+            Your Competitors Won't Wait
+          </h2>
+          <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+            Every day you delay is another day they gain ground. Start your transformation today and become the leader in your industry.
+          </p>
 
-              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
-                <Link href='/onboarding' className="group bg-gradient-to-r from-purple-600 to-cyan-600 px-10 py-4 rounded-full text-xl font-semibold hover:from-purple-700 hover:to-cyan-700 transition-all duration-300 shadow-2xl hover:shadow-cyan-500/25 hover:scale-105 flex items-center space-x-2">
-                  <span>Start Free 14-Day Trial</span>
-                  <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
-                </Link>
-              </div>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
+            <button className="group bg-white cursor-pointer text-blue-600 px-10 py-4 rounded-lg text-xl font-bold hover:bg-gray-50 transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-105 flex items-center space-x-2">
+              <span>Start Free 14-Day Trial</span>
+              <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
+            </button>
+          </div>
 
-              <div className="flex flex-wrap justify-center items-center gap-6 text-sm ">
-                <div className="flex items-center space-x-2">
-                  <Shield className="w-4 h-4 text-green-400" />
-                  <span>No credit card required</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Clock className="w-4 h-4 text-green-400" />
-                  <span>Setup in under 5 minutes</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Users className="w-4 h-4 text-green-400" />
-                  <span>24/7 expert support</span>
-                </div>
-              </div>
+          <div className="flex flex-wrap justify-center items-center gap-8 text-blue-100">
+            <div className="flex items-center space-x-2">
+              <Shield className="w-5 h-5" />
+              <span className="font-medium">No Credit Card Required</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Clock className="w-5 h-5" />
+              <span className="font-medium">Setup in 5 Minutes</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Lock className="w-5 h-5" />
+              <span className="font-medium">Cancel Anytime</span>
             </div>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="py-12 px-4 sm:px-6 lg:px-8 border-t border-white/10 bg-gradient-to-br from-blue-50/50 to-purple-50/50">
+      <footer className="py-12 px-4 sm:px-6 lg:px-8 border-t border-gray-200 bg-white">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="flex items-center space-x-2 mb-4 md:mb-0">
-              <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-cyan-500 rounded-lg flex items-center justify-center">
-                <Sparkles className="w-5 h-5 text-white" />
+            <div className="flex items-center space-x-3 mb-4 md:mb-0">
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-xl flex items-center justify-center shadow-lg">
+                <Network className="w-6 h-6 text-white" />
               </div>
-              <span className="text-xl font-bold bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
-                One4All
-              </span>
+              <span className="text-2xl font-bold text-gray-900">One4All</span>
             </div>
-            <div className="flex space-x-8 text-sm">
-              <a href="#" className="hover:text-white transition-colors">Privacy</a>
-              <a href="#" className="hover:text-white transition-colors">Terms</a>
-              <a href="#" className="hover:text-white transition-colors">Support</a>
+            <div className="flex space-x-8 text-gray-600">
+              <a href="#" className="hover:text-gray-900 transition-colors font-medium">Privacy</a>
+              <a href="#" className="hover:text-gray-900 transition-colors font-medium">Terms</a>
+              <a href="#" className="hover:text-gray-900 transition-colors font-medium">Support</a>
             </div>
           </div>
-          <div className="mt-8 pt-8 border-t border-white/10 text-center text-sm">
+          <div className="mt-8 pt-8 border-t border-gray-200 text-center text-gray-600">
             © 2025 One4All. All rights reserved. Transform your business. Dominate your market.
           </div>
         </div>

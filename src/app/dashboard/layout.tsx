@@ -192,7 +192,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
                 {/* Main Content */}
                 <main className="flex-1 min-w-0 w-full max-w-full p-4 overflow-x-hidden ml-16 md:ml-64 mt-[73px]">
-                    <div className="w-full max-w-full">
+                    <div className="w-full max-w-full" suppressHydrationWarning>
                         {children}
                     </div>
                 </main>
