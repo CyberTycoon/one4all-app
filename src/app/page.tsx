@@ -8,6 +8,7 @@ import {
   TrendingUpIcon,
   Clock1
 } from 'lucide-react';
+import Link from 'next/link';
 
 const One4AllHomepage = () => {
   const [isVisible, setIsVisible] = useState<Record<string, boolean>>({});
@@ -137,9 +138,9 @@ const One4AllHomepage = () => {
               <a href="#features" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">Features</a>
               <a href="#how-it-works" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">How It Works</a>
               <a href="#pricing" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">Pricing</a>
-              <button className="cursor-pointer bg-blue-600 text-white px-6 py-2.5 rounded-lg hover:bg-blue-700 transition-all duration-300 font-semibold shadow-lg hover:shadow-xl">
+              <Link href='/onboarding' className="cursor-pointer bg-blue-600 text-white px-6 py-2.5 rounded-lg hover:bg-blue-700 transition-all duration-300 font-semibold shadow-lg hover:shadow-xl">
                 Start Free Trial
-              </button>
+              </Link>
             </div>
 
             {/* Mobile Menu Button */}
@@ -157,9 +158,9 @@ const One4AllHomepage = () => {
             <a href="#features" className="block text-gray-700 hover:text-blue-600 font-medium py-2">Features</a>
             <a href="#how-it-works" className="block text-gray-700 hover:text-blue-600 font-medium py-2">How It Works</a>
             <a href="#pricing" className="block text-gray-700 hover:text-blue-600 font-medium py-2">Pricing</a>
-            <button className="cursor-pointer w-full bg-blue-600 text-white px-4 py-3 rounded-lg hover:bg-blue-700 transition-all font-semibold">
+            <Link href='/onboarding' className="cursor-pointer w-full bg-blue-600 text-white px-4 py-3 rounded-lg hover:bg-blue-700 transition-all font-semibold">
               Start Free Trial
-            </button>
+            </Link>
           </div>
         )}
       </nav>
@@ -186,10 +187,10 @@ const One4AllHomepage = () => {
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center mb-12">
-                <button className="group cursor-pointer bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-700 transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-105 flex items-center space-x-2">
+                <Link href='/onboarding' className="group cursor-pointer bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-700 transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-105 flex items-center space-x-2">
                   <span>Start Your Transformation</span>
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </button>
+                </Link>
                 <button className="group cursor-pointer flex items-center space-x-3 text-blue-600 hover:text-blue-700 transition-colors">
                   <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center group-hover:bg-blue-200 transition-all">
                     <Play className="w-5 h-5 ml-1" />
@@ -495,10 +496,10 @@ const One4AllHomepage = () => {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
-            <button className="group bg-white cursor-pointer text-blue-600 px-10 py-4 rounded-lg text-xl font-bold hover:bg-gray-50 transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-105 flex items-center space-x-2">
+            <Link href='/onboarding' className="group bg-white cursor-pointer text-blue-600 px-10 py-4 rounded-lg text-xl font-bold hover:bg-gray-50 transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-105 flex items-center space-x-2">
               <span>Start Free 14-Day Trial</span>
               <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
-            </button>
+            </Link>
           </div>
 
           <div className="flex flex-wrap justify-center items-center gap-8 text-blue-100">
