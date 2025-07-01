@@ -1,11 +1,14 @@
-
 'use client'
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
   Clock, Shield, ArrowRight, Play, Sparkles, Rocket, Award, Users, CheckCircle, Network, BarChart3, Globe, Lightbulb, X, Menu, Star, Lock, Heart, Smile, TrendingUp, Brain, Target, Zap, Activity, Clock3
 } from 'lucide-react';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 
+// 3D Floating Icon (Globe/Node) and Network Animation Components
+const ThreeDFloatingIcon = dynamic(() => import('./components/ThreeDFloatingIcon'), { ssr: false });
+const ThreeDNetwork = dynamic(() => import('./components/ThreeDNetwork'), { ssr: false });
 
 const One4AllHomepage = () => {
   const [isVisible, setIsVisible] = useState<Record<string, boolean>>({});
@@ -14,6 +17,8 @@ const One4AllHomepage = () => {
   const [scrollY, setScrollY] = useState(0);
   const observerRef = useRef<IntersectionObserver | null>(null);
   const elementsRef = useRef<Set<Element>>(new Set());
+  const [preloadedImages, setPreloadedImages] = useState<{ [src: string]: string }>({});
+  const [imagesLoaded, setImagesLoaded] = useState(false);
 
   const heroImages = [
     "/hero-1.jpg",
@@ -107,65 +112,53 @@ const One4AllHomepage = () => {
     };
   }, []);
 
-  const NetworkAnimation = () => (
-    <div className="relative w-full h-80 overflow-hidden rounded-2xl bg-white shadow-2xl border border-gray-100">
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-indigo-50">
-        <div className="absolute inset-0 flex items-center justify-center">
-          {/* Central Hub */}
-          <div className="relative">
-            <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center shadow-xl animate-pulse">
-              <Network className="w-8 h-8 text-white" />
-            </div>
-            <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 text-xs font-semibold text-blue-700 whitespace-nowrap bg-white px-2 py-1 rounded-full shadow-md">
-              One4All AI
-            </div>
-          </div>
+  // Preload images on mount
+  useEffect(() => {
+    const allImages = [...heroImages, ...featureImages, '/sad.jpg', '/happy.jpg'];
+    let loaded: { [src: string]: string } = {};
+    let count = 0;
+    allImages.forEach((src) => {
+      const img = new window.Image();
+      img.src = src;
+      img.onload = () => {
+        loaded[src] = src;
+        count++;
+        if (count === allImages.length) {
+          setPreloadedImages(loaded);
+          setImagesLoaded(true);
+        }
+      };
+      img.onerror = () => {
+        loaded[src] = src; // fallback to src
+        count++;
+        if (count === allImages.length) {
+          setPreloadedImages(loaded);
+          setImagesLoaded(true);
+        }
+      };
+    });
+  }, []);
 
-          {/* Floating Metrics */}
-          <div className="absolute top-4 right-4 space-y-2">
-            <div className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-semibold shadow-md animate-bounce">
-              +387% ROI
-            </div>
-            <div className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-semibold shadow-md animate-bounce" style={{ animationDelay: '0.5s' }}>
-              15hrs Saved
-            </div>
-            <div className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-xs font-semibold shadow-md animate-bounce" style={{ animationDelay: '1s' }}>
-              94% Accuracy
-            </div>
-          </div>
-
-          {/* Platform Icons */}
-          <div className="absolute inset-0">
-            {['Instagram', 'TikTok', 'LinkedIn', 'Twitter', 'Facebook', 'YouTube'].map((platform, i) => (
-              <div
-                key={platform}
-                className="absolute w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center animate-pulse"
-                style={{
-                  left: `${20 + (i * 60) % 300}px`,
-                  top: `${50 + (i * 80) % 200}px`,
-                  animationDelay: `${i * 0.3}s`
-                }}
-              >
-                <div className="w-4 h-4 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full"></div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
-  // Simplified image component - no blinking
+  // Update StableImage to use preloaded images
   const StableImage = React.memo(({ src, alt, className }: { src: string; alt: string; className: string }) => {
+    const loadedSrc = preloadedImages[src];
     return (
-      <div className={`relative overflow-hidden ${className}`}>
-        <img
-          src={src}
-          alt={alt}
-          className="w-full h-full object-cover"
-          loading="eager"
-          decoding="async"
-        />
+      <div className={`relative overflow-hidden ${className}`} style={{ background: '#f3f4f6' }}>
+        {!imagesLoaded && (
+          <div className="absolute inset-0 flex items-center justify-center bg-gray-100 animate-pulse z-10">
+            <span className="text-gray-300">Loading...</span>
+          </div>
+        )}
+        {loadedSrc && (
+          <img
+            src={loadedSrc}
+            alt={alt}
+            className="w-full h-full object-cover responsive-img"
+            loading="eager"
+            decoding="async"
+            style={{ opacity: imagesLoaded ? 1 : 0, transition: 'opacity 0.3s' }}
+          />
+        )}
       </div>
     );
   });
@@ -316,7 +309,7 @@ const One4AllHomepage = () => {
               </p>
 
               <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start items-center mb-8">
-                <button className="group cursor-pointer bg-blue-600 text-white px-6 py-2.5 rounded-lg text-sm font-medium hover:bg-blue-700 transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-105 flex items-center space-x-2">
+                <button className="group cursor-pointer bg-blue-600 text-white px-6 py-2.5 rounded-lg text-sm font-medium hover:bg-blue-700 transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-105 flex items-center space-x-2 three-d-btn">
                   <span>Start Your Transformation</span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </button>
@@ -342,28 +335,11 @@ const One4AllHomepage = () => {
             </div>
 
             {/* Right Side - Hero Image */}
-            <div className="relative">
-              <div className="relative overflow-hidden rounded-2xl shadow-2xl aspect-[4/3]">
-                <StableImage
-                  src={heroImages[currentImageIndex]}
-                  alt="One4All Dashboard"
-                  className="w-full h-full"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-blue-900/20 to-transparent"></div>
-                <div className="absolute bottom-3 left-3 right-3">
-                  <div className="bg-white/90 backdrop-blur-sm rounded-lg p-3 shadow-lg">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-2">
-                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                        <span className="text-xs font-medium text-gray-800">AI Analysis Running</span>
-                      </div>
-                      <div className="text-xs font-semibold text-green-600">+387% Performance</div>
-                    </div>
-                  </div>
-                </div>
+            <div className="relative flex flex-col items-center">
+              <div className="relative w-full h-72 md:h-96 three-d-canvas">
+                <ThreeDFloatingIcon />
               </div>
-
-              {/* Image indicators */}
+              {/* Image indicators remain below */}
               <div className="flex justify-center space-x-1.5 mt-3">
                 {heroImages.map((_, i) => (
                   <div key={i} className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${i === currentImageIndex ? 'bg-blue-600' : 'bg-gray-300'}`} />
@@ -565,8 +541,8 @@ const One4AllHomepage = () => {
           </div>
 
           <div className="grid lg:grid-cols-2 gap-8 items-center mb-12">
-            <div>
-              <NetworkAnimation />
+            <div className="three-d-canvas">
+              <ThreeDNetwork />
             </div>
             <div className="space-y-6">
               {[
