@@ -336,14 +336,12 @@ const One4AllHomepage = () => {
 
             {/* Right Side - Hero Image */}
             <div className="relative flex flex-col items-center">
-              <div className="relative w-full h-72 md:h-96 three-d-canvas">
+              <div className="relative w-full h-80 md:h-96 three-d-canvas">
                 <ThreeDFloatingIcon />
               </div>
               {/* Image indicators remain below */}
-              <div className="flex justify-center space-x-1.5 mt-3">
-                {heroImages.map((_, i) => (
-                  <div key={i} className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${i === currentImageIndex ? 'bg-blue-600' : 'bg-gray-300'}`} />
-                ))}
+              <div className="h-2 w-full rounded-b-lg bg-blue-700">
+
               </div>
             </div>
           </div>
@@ -443,7 +441,7 @@ const One4AllHomepage = () => {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-green-900/20 to-transparent rounded-2xl"></div>
               <div className="absolute bottom-3 left-3 right-3">
-                <div className="bg-white/90 backdrop-blur-sm rounded-lg p-3 shadow-lg">
+                <div className="bg-white/30 backdrop-blur-xs rounded-lg p-3 shadow-lg">
                   <div className="text-center">
                     <div className="text-lg font-semibold text-green-600 mb-1">This Could Be You</div>
                     <div className="text-xs text-gray-600">Living the business owner's dream</div>
