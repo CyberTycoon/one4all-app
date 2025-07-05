@@ -11,9 +11,12 @@ import {
     Users,
     Menu,
     X,
-    Network
+    Network,
+    PanelLeftOpenIcon,
+    PanelRightClose,
+    PanelLeftClose
 } from 'lucide-react';
-import { AppContext } from '../../context/AppContext';
+
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 
@@ -24,44 +27,21 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = ({ children }) => {
     const location = usePathname()
     const navigate = useRouter();
-    const { loggedUser, userDetails, setLoggedUser } = useContext(AppContext);
     const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
-    useEffect(() => {
-        if (!loggedUser) {
-            navigate.push('/onboarding/login');
-        }
-    }, [loggedUser, navigate]);
 
-    const handleLogout = useCallback(() => {
-        localStorage.removeItem('user');
-        localStorage.removeItem('token');
-        setLoggedUser(null);
-        navigate.push('/onboarding/login');
-    }, [setLoggedUser, navigate]);
 
-    const displayName = useMemo(() => loggedUser?.username || 'User', [loggedUser]);
-    const businessName = useMemo(() => userDetails?.business_name || 'Business', [userDetails]);
 
     const navigation = useMemo(() => [
         { name: 'Overview', href: '/dashboard', icon: Home },
 
-        // Content Creation & Scheduling
+        // Core: AI + Creation + Scheduling
         { name: 'AI Suggestions', href: '/dashboard/suggestions', icon: Zap },
         { name: 'Content Calendar', href: '/dashboard/calendar', icon: Calendar },
         { name: 'Create Post', href: '/dashboard/create', icon: PenTool },
 
-        // Growth Intelligence
-        { name: 'Campaigns', href: '/dashboard/campaigns', icon: TrendingUp },
-        { name: 'Competitor Watch', href: '/dashboard/competitors', icon: Eye },
-
-        // Engagement & Audience
-        { name: 'Smart Messaging', href: '/dashboard/messaging', icon: MessageSquare },
-        { name: 'Audience Insights', href: '/dashboard/audience', icon: Users },
-
-        // Connections & Settings
+        // Setup & Support
         { name: 'Social Accounts', href: '/dashboard/social', icon: LinkIcon },
-        { name: 'Billing', href: '/dashboard/billing', icon: CreditCard },
         { name: 'Settings', href: '/dashboard/settings', icon: Settings },
     ], []);
 
@@ -78,45 +58,50 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         closeMobileSidebar();
     }, [location, closeMobileSidebar]);
 
-    // Display loader while user data is being validated or fetched
-    if (!loggedUser || !userDetails) {
-        return (
-            <div className="flex items-center justify-center h-screen">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-purple-500" />
-            </div>
-        );
-    }
+
 
     return (
         <div className="min-h-screen bg-gray-50 w-full overflow-x-hidden">
+            {/* Grid Background Pattern */}
+            <div
+                className="fixed inset-0 pointer-events-none z-0"
+                style={{
+                    backgroundImage: `
+                        linear-gradient(rgba(156, 163, 175, 0.03) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(156, 163, 175, 0.03) 1px, transparent 1px)
+                    `,
+                    backgroundSize: '24px 24px'
+                }}
+            />
+
             {/* Header */}
             <header className="bg-white shadow-sm border-b border-gray-200 py-2 md:pt-1 fixed top-0 z-20 w-full">
                 <div className="w-full max-w-full mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between items-center h-16">
-                        <Link href="/" className="text-xl font-bold text-purple-600 flex-shrink-0">
+                        <Link href="/" className="text-xl font-bold text-blue-600 flex-shrink-0">
                             <div className="flex items-center space-x-3">
-                                <div className="bg-purple-600 p-2 rounded-lg">
+                                <div className="bg-blue-600 p-2 rounded-lg">
                                     <ChefHat className="w-6 h-6 text-white" />
                                 </div>
                                 <div className="min-w-0">
-                                    <h1 className="text-lg font-bold text-gray-900 truncate">{businessName}</h1>
+                                    <h1 className="text-lg font-bold text-gray-900 truncate">Rehub</h1>
                                     <p className="text-xs text-gray-500 hidden md:flex truncate">Restaurant Growth Platform</p>
                                 </div>
                             </div>
                         </Link>
                         <div className="flex items-center space-x-2 md:space-x-4 flex-shrink-0">
                             <div className="text-right min-w-0">
-                                <p className="text-sm font-medium text-gray-900 truncate">{displayName}</p>
+                                <p className="text-sm font-medium text-gray-900 truncate">sighlars</p>
                                 <p className="text-xs text-gray-500 truncate max-w-[80px] md:max-w-[150px]">
-                                    {loggedUser.email}
+                                    okanlawonsilas@gmail.com
                                 </p>
                             </div>
-                            <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
-                                <span className="text-sm font-medium text-purple-700">{displayName.charAt(0)}</span>
+                            <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                                <span className="text-sm font-medium text-blue-700">S</span>
                             </div>
                             <button
-                                onClick={handleLogout}
-                                className="p-2 cursor-pointer bg-purple-600 rounded-md text-xs md:text-sm font-medium text-white hover:bg-purple-700 flex-shrink-0"
+
+                                className="p-2 cursor-pointer bg-blue-600 rounded-md text-xs md:text-sm font-medium text-white hover:bg-blue-700 flex-shrink-0"
                             >
                                 Logout
                             </button>
@@ -136,7 +121,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
                 {/* Sidebar */}
                 <nav className={`
-                    fixed left-0 top-[73px] bg-white shadow-sm h-[calc(100vh-73px)] z-10 flex-shrink-0
+                    fixed left-0 top-[73px] bg-white shadow-sm h-[calc(100vh-73px)] z-30 flex-shrink-0
                     transition-all duration-300 ease-in-out
                     ${isMobileSidebarOpen ? 'w-64' : 'w-16'} md:w-64
                 `}>
@@ -149,24 +134,24 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                                 aria-label="Toggle menu"
                             >
                                 {isMobileSidebarOpen ? (
-                                    <X className="w-5 h-5 text-gray-600" />
+                                    <PanelLeftClose className="w-5 h-5 text-gray-600" />
                                 ) : (
-                                    <Menu className="w-5 h-5 text-gray-600" />
+                                    <PanelLeftOpenIcon className="w-5 h-5 text-gray-600" />
                                 )}
                             </button>
                             {isMobileSidebarOpen && (
                                 <div className="flex items-center space-x-2">
-                                    <div className="bg-purple-600 p-1 rounded">
+                                    <div className="bg-blue-600 p-1 rounded">
                                         <Network className="w-4 h-4 text-white" />
                                     </div>
                                     <span className="text-sm font-medium text-gray-900 truncate">
-                                        {businessName}
+                                        Rehub Developers
                                     </span>
                                 </div>
                             )}
                         </div>
 
-                        <ul className="space-y-2 flex-1">
+                        <ul className="space-y-2 flex-1 z-50">
                             {navigation.map((item) => {
                                 const isActive = location === item.href;
                                 return (
@@ -174,7 +159,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                                         <Link
                                             href={item.href}
                                             className={`flex items-center space-x-3 px-1 md:px-3 py-2 rounded-lg text-sm font-medium transition-colors w-full ${isActive
-                                                ? 'bg-purple-50 text-purple-700 border border-purple-200'
+                                                ? 'bg-blue-50 text-blue-700 border border-blue-200'
                                                 : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                                                 }`}
                                         >
@@ -191,7 +176,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 </nav>
 
                 {/* Main Content */}
-                <main className="flex-1 min-w-0 w-full max-w-full p-4 overflow-x-hidden ml-16 md:ml-64 mt-[73px]">
+                <main className="flex-1 min-w-0 w-full max-w-full p-4 overflow-x-hidden ml-16 md:ml-64 mt-[73px] relative z-10">
                     <div className="w-full max-w-full" suppressHydrationWarning>
                         {children}
                     </div>

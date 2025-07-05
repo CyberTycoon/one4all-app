@@ -252,7 +252,7 @@ const One4AllHomepage = () => {
 
               {/* Desktop Menu */}
               <div className="hidden md:flex items-center space-x-6">
-                <a href="#features" className="text-sm text-gray-600 hover:text-blue-600 transition-colors font-medium">Features</a>
+                <a href="/dashboard" className="text-sm text-gray-600 hover:text-blue-600 transition-colors font-medium">Features</a>
                 <a href="#how-it-works" className="text-sm text-gray-600 hover:text-blue-600 transition-colors font-medium">How It Works</a>
                 <a href="#pricing" className="text-sm text-gray-600 hover:text-blue-600 transition-colors font-medium">Pricing</a>
                 <button className="cursor-pointer bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-all duration-300 font-medium shadow-lg hover:shadow-xl text-sm">
@@ -271,7 +271,7 @@ const One4AllHomepage = () => {
             {/* Mobile Menu */}
             {isOpen && (
               <div className="md:hidden mt-4 pt-4 border-t border-gray-200/50 space-y-3">
-                <a href="#features" className="block text-sm text-gray-600 hover:text-blue-600 font-medium py-1">Features</a>
+                <a href="/dashboard" className="block text-sm text-gray-600 hover:text-blue-600 font-medium py-1">Features</a>
                 <a href="#how-it-works" className="block text-sm text-gray-600 hover:text-blue-600 font-medium py-1">How It Works</a>
                 <a href="#pricing" className="block text-sm text-gray-600 hover:text-blue-600 font-medium py-1">Pricing</a>
                 <button className="cursor-pointer block w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-all font-medium text-sm text-center">

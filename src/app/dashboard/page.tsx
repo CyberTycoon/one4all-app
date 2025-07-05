@@ -12,125 +12,166 @@ import {
     ArrowDown,
     Eye,
     MessageSquare,
-    Zap
+    Zap,
+    Clock,
+    ThumbsUp,
+    AlertCircle,
+    CheckCircle
 } from 'lucide-react';
-import { AppContext } from '../../context/AppContext';
 import { useRouter } from 'next/navigation';
 
+// Client-side wrapper to prevent hydration issues
+const ClientOnly: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+    const [hasMounted, setHasMounted] = useState(false);
+
+    useEffect(() => {
+        setHasMounted(true);
+    }, []);
+
+    if (!hasMounted) {
+        return null;
+    }
+
+    return <>{children}</>;
+};
+
+// Shimmer loading component
+const ShimmerCard = () => (
+    <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200 animate-pulse">
+        <div className="flex items-center justify-between mb-4">
+            <div className="w-12 h-12 bg-gray-200 rounded-lg"></div>
+            <div className="w-16 h-4 bg-gray-200 rounded"></div>
+        </div>
+        <div className="space-y-2">
+            <div className="w-24 h-6 bg-gray-200 rounded"></div>
+            <div className="w-32 h-4 bg-gray-200 rounded"></div>
+        </div>
+    </div>
+);
+
 const Overview: React.FC = () => {
+    const [isLoading, setIsLoading] = useState(true);
+    const [timeGreeting, setTimeGreeting] = useState('');
+
+    useEffect(() => {
+        // Simulate loading
+        const timer = setTimeout(() => setIsLoading(false), 1000);
+
+        // Set time-based greeting
+        const hour = new Date().getHours();
+        if (hour < 12) setTimeGreeting('Good morning');
+        else if (hour < 17) setTimeGreeting('Good afternoon');
+        else setTimeGreeting('Good evening');
+
+        return () => clearTimeout(timer);
+    }, []);
+
     const stats = [
         {
-            name: 'Predicted Uplift This Month',
-            value: '+$5,720',
-            change: '+18.4%',
-            trend: 'up',
-            icon: DollarSign,
-            color: 'text-green-600'
-        },
-        {
-            name: 'Auto-Scheduled Posts',
-            value: '84',
-            change: '+34.2%',
+            name: 'Scheduled Posts This Week',
+            value: '12',
+            change: '+3',
             trend: 'up',
             icon: Calendar,
-            color: 'text-blue-600'
+            color: 'text-blue-600',
+            bgColor: 'bg-blue-100'
         },
         {
-            name: 'Campaigns in Optimization',
-            value: '5',
-            change: '+66%',
+            name: 'Most Engaging Post',
+            value: '2.4K',
+            change: 'likes',
             trend: 'up',
-            icon: TrendingUp,
-            color: 'text-purple-600'
+            icon: ThumbsUp,
+            color: 'text-green-600',
+            bgColor: 'bg-green-100'
+        },
+        {
+            name: 'Next Best Time to Post',
+            value: '2:30 PM',
+            change: 'Today',
+            trend: 'neutral',
+            icon: Clock,
+            color: 'text-orange-600',
+            bgColor: 'bg-orange-100'
         }
     ];
 
+    const aiSuggestion = {
+        title: 'New Trend Detected',
+        description: 'Vegan food hashtags trending +15% this week',
+        action: 'Create a post now',
+        icon: Zap,
+        color: 'bg-blue-100 text-blue-600'
+    };
 
-    const services = [
-        {
-            name: 'AI Suggestions Engine',
-            status: 'Active',
-            metric: '12 new insights this week',
-            nextAction: 'View today’s suggestions',
-            icon: Zap,
-            color: 'bg-purple-100 text-purple-600'
-        },
-        {
-            name: 'Smart Messaging',
-            status: 'Active',
-            metric: '32 sequences triggered',
-            nextAction: 'View engagement stats',
-            icon: MessageSquare,
-            color: 'bg-blue-100 text-blue-600'
-        },
-        {
-            name: 'Competitor Campaigns',
-            status: 'Tracking',
-            metric: '3 rivals watched',
-            nextAction: 'View counter-campaigns',
-            icon: Eye,
-            color: 'bg-green-100 text-green-600'
-        }
+    const calendarPreview = [
+        { time: '10:00 AM', platform: 'Instagram', status: 'scheduled' },
+        { time: '2:30 PM', platform: 'TikTok', status: 'scheduled' },
+        { time: '6:00 PM', platform: 'Facebook', status: 'draft' }
+    ];
+
+    const setupChecklist = [
+        { item: 'Connect Instagram Account', completed: true },
+        { item: 'Connect TikTok Account', completed: false },
+        { item: 'Set up posting schedule', completed: true },
+        { item: 'Configure AI preferences', completed: false }
     ];
 
     const navigate = useRouter();
-    const { useContext } = React;
 
-    const { loggedUser } = useContext(AppContext);
-
-    const [isLoading, setIsLoading] = useState(true);
-
-
-    useEffect(() => {
-        const delayAndCheckUser = async () => {
-            // Simulate intentional load delay (e.g., to fetch user & stats)
-            await new Promise((res) => setTimeout(res, 500)); // Adjust as needed
-
-            if (loggedUser === null) {
-                navigate.push('/onboarding/login');
-            } else {
-                setIsLoading(false);
-            }
-        };
-
-        delayAndCheckUser();
-    }, [loggedUser, navigate]);
-
-    const displayName = loggedUser?.business_name || 'User';
-
-    // === Spinner while loading ===
     if (isLoading) {
         return (
-            <div className="flex items-center justify-center h-screen">
-                <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-purple-500 border-solid"></div>
+            <div className="space-y-8">
+                {/* Shimmer Welcome Header */}
+                <div className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-2xl p-8 animate-pulse">
+                    <div className="w-64 h-8 bg-blue-500 rounded mb-2"></div>
+                    <div className="w-96 h-6 bg-blue-500 rounded"></div>
+                </div>
+
+                {/* Shimmer Stats */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    {[1, 2, 3].map((i) => (
+                        <ShimmerCard key={i} />
+                    ))}
+                </div>
+
+                {/* Shimmer AI Suggestion */}
+                <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200 animate-pulse">
+                    <div className="w-48 h-6 bg-gray-200 rounded mb-2"></div>
+                    <div className="w-64 h-4 bg-gray-200 rounded mb-4"></div>
+                    <div className="w-32 h-4 bg-gray-200 rounded"></div>
+                </div>
             </div>
         );
     }
 
-
     return (
         <Suspense fallback={
             <div className="flex items-center justify-center h-screen">
-                <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-purple-500">loading</div>
+                <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-600">loading</div>
             </div>
         }>
             <div className="space-y-8">
                 {/* Welcome Header */}
-                <div className="bg-gradient-to-r from-purple-600 to-purple-700 rounded-2xl p-8 text-white">
-                    <h1 className="text-3xl font-bold mb-2">Welcome back, {displayName}!</h1>
-                    <p className="text-purple-100 text-lg">
-                        Here's how your business is performing across all marketing channels.
+                <div className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-2xl p-8 text-white">
+                    <h1 className="text-3xl font-bold mb-2">
+                        <ClientOnly>
+                            {timeGreeting}, Sighlars!
+                        </ClientOnly>
+                    </h1>
+                    <p className="text-blue-100 text-lg">
+                        Here's your platform status — performance, content activity, and AI insights.
                     </p>
                 </div>
 
-                {/* Key Metrics */}
+                {/* Key Metrics - 3 Column Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {stats.map((stat) => {
                         const Icon = stat.icon;
                         return (
                             <div key={stat.name} className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
                                 <div className="flex items-center justify-between">
-                                    <div className={`w-12 h-12 rounded-lg ${stat.color === 'text-green-600' ? 'bg-green-100' : stat.color === 'text-blue-600' ? 'bg-blue-100' : 'bg-purple-100'} flex items-center justify-center`}>
+                                    <div className={`w-12 h-12 rounded-lg ${stat.bgColor} flex items-center justify-center`}>
                                         <Icon className={`w-6 h-6 ${stat.color}`} />
                                     </div>
                                     <div className={`flex items-center space-x-1 text-sm ${stat.trend === 'up' ? 'text-green-600' :
@@ -150,71 +191,70 @@ const Overview: React.FC = () => {
                     })}
                 </div>
 
-                {/* Service Status Cards */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    {services.map((service) => {
-                        const Icon = service.icon;
-                        return (
-                            <div key={service.name} className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-                                <div className="flex items-center justify-between mb-4">
-                                    <div className={`w-10 h-10 rounded-lg ${service.color} flex items-center justify-center`}>
-                                        <Icon className="w-5 h-5" />
-                                    </div>
-                                    <span className="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                                        {service.status}
-                                    </span>
-                                </div>
-                                <h3 className="text-lg font-semibold text-gray-900 mb-2">{service.name}</h3>
-                                <p className="text-gray-600 text-sm mb-4">{service.metric}</p>
-                                <button className="text-purple-600 text-sm font-medium hover:text-purple-700 transition-colors">
-                                    {service.nextAction} →
-                                </button>
+                {/* AI Suggestion Box - Wide Row */}
+                <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+                    <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center space-x-3">
+                            <div className={`w-10 h-10 rounded-lg ${aiSuggestion.color} flex items-center justify-center`}>
+                                <aiSuggestion.icon className="w-5 h-5" />
                             </div>
-                        );
-                    })}
+                            <div>
+                                <h3 className="text-lg font-semibold text-gray-900">{aiSuggestion.title}</h3>
+                                <p className="text-gray-600 text-sm">{aiSuggestion.description}</p>
+                            </div>
+                        </div>
+                        <button className="text-blue-600 text-sm font-medium hover:text-blue-700 transition-colors">
+                            {aiSuggestion.action} →
+                        </button>
+                    </div>
                 </div>
 
-                {/* Recent Activity */}
-                <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                    <h3 className="text-xl font-semibold text-gray-900 mb-6">Recent Activity</h3>
-                    <div className="space-y-4">
-                        {[
-                            {
-                                action: 'AI scheduled new content post',
-                                location: 'TikTok — Vegan Burger Campaign',
-                                time: '1 hour ago',
-                                type: 'info'
-                            },
-                            {
-                                action: 'Competitor discount tracked',
-                                location: '“Rival Foods” Summer Deal ends Friday',
-                                time: '3 hours ago',
-                                type: 'success'
-                            },
-                            {
-                                action: 'Auto-sequence sent to visitor',
-                                location: 'SMS: Plan X vs Plan Y comparison',
-                                time: '6 hours ago',
-                                type: 'info'
-                            },
-                            {
-                                action: 'Campaign uplift calculated',
-                                location: '+$420 saved in CPC optimization',
-                                time: '1 day ago',
-                                type: 'success'
-                            }
-                        ].map((activity, index) => (
-                            <div key={index} className="flex items-center space-x-4 py-3 border-b border-gray-100 last:border-b-0">
-                                <div className={`w-3 h-3 rounded-full ${activity.type === 'success' ? 'bg-green-400' :
-                                    activity.type === 'info' ? 'bg-blue-400' : 'bg-gray-400'
-                                    }`} />
-                                <div className="flex-1">
-                                    <p className="text-gray-900 font-medium">{activity.action}</p>
-                                    <p className="text-gray-600 text-sm">{activity.location}</p>
+                {/* Calendar Preview & Setup Checklist - 2 Column Grid */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    {/* Calendar Preview */}
+                    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                        <h3 className="text-xl font-semibold text-gray-900 mb-6">Next 3 Post Slots</h3>
+                        <div className="space-y-4">
+                            {calendarPreview.map((slot, index) => (
+                                <div key={index} className="flex items-center justify-between py-3 border-b border-gray-100 last:border-b-0">
+                                    <div className="flex items-center space-x-3">
+                                        <div className={`w-3 h-3 rounded-full ${slot.status === 'scheduled' ? 'bg-green-400' : 'bg-yellow-400'}`} />
+                                        <div>
+                                            <p className="text-gray-900 font-medium">{slot.time}</p>
+                                            <p className="text-gray-600 text-sm">{slot.platform}</p>
+                                        </div>
+                                    </div>
+                                    <span className={`text-xs font-medium px-2 py-1 rounded-full ${slot.status === 'scheduled'
+                                        ? 'bg-green-100 text-green-800'
+                                        : 'bg-yellow-100 text-yellow-800'
+                                        }`}>
+                                        {slot.status}
+                                    </span>
                                 </div>
-                                <span className="text-gray-500 text-sm">{activity.time}</span>
-                            </div>
-                        ))}
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Account Setup Checklist */}
+                    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                        <h3 className="text-xl font-semibold text-gray-900 mb-6">Account Setup</h3>
+                        <div className="space-y-4">
+                            {setupChecklist.map((item, index) => (
+                                <div key={index} className="flex items-center space-x-3">
+                                    {item.completed ? (
+                                        <CheckCircle className="w-5 h-5 text-green-500" />
+                                    ) : (
+                                        <AlertCircle className="w-5 h-5 text-orange-500" />
+                                    )}
+                                    <span className={`text-sm ${item.completed ? 'text-gray-600 line-through' : 'text-gray-900'}`}>
+                                        {item.item}
+                                    </span>
+                                </div>
+                            ))}
+                        </div>
+                        <button className="mt-4 text-blue-600 text-sm font-medium hover:text-blue-700 transition-colors">
+                            Complete setup →
+                        </button>
                     </div>
                 </div>
             </div>
